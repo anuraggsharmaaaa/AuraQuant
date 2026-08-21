@@ -48,8 +48,9 @@ The entire infrastructure is fully containerized and orchestrated via Docker Com
     docker compose down
 
     
-    
-    🧪 Testing
+
+
+🧪 Testing
 
 The repository includes a comprehensive unit testing suite (pytest) to validate core mathematical functions (OHLCV resampling and VWAP accuracy):
     pytest tests/
