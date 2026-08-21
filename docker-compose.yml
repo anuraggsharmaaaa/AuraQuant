@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  ingestion:
+    build: .
+    container_name: auraquant_ingestion
+    command: python -m src.ingestion.ticker
+    volumes:
+      - ./data:/app/data
+    restart: always
+
+  dashboard:
+    build: .
+    container_name: auraquant_dashboard
+    command: streamlit run dashboard.py --server.port=8501 --server.address=0.0.0.0
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./data:/app/data
+    depends_on:
+      - ingestion
+    restart: always

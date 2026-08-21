@@ -9,16 +9,19 @@ from src.utils.logger import logger
 
 async def stream_market_data():
     init_db()
-    logger.info(f"Connecting to market stream: {settings.WEBSOCKET_URL}")
+    logger.info(f"Connecting to Multi-Asset stream: {settings.WEBSOCKET_URL}")
     
     while True:
         try:
             async with websockets.connect(settings.WEBSOCKET_URL) as ws:
-                logger.info("WebSocket Connection Established. Ingesting live ticks...")
+                logger.info("WebSocket Connection Established. Ingesting BTC, ETH, and SOL ticks...")
                 
                 while True:
                     raw_data = await ws.recv()
-                    data = json.loads(raw_data)
+                    payload = json.loads(raw_data)
+                    
+                    # Combined streams wrap the actual ticker payload in a 'data' key
+                    data = payload.get("data", payload)
                     
                     symbol = data.get("s", "UNKNOWN")
                     price = float(data.get("c", 0.0))
